@@ -9,17 +9,23 @@ name - sting
 uuid - universal unique id
 statement
 */
-
 const customers = [];
 // REQUISITO 1, DEVE SER POSSIVEL CRIAR UMA CONTA
-app.post("/conta", (request, response) => {
+app.post("/account", (request, response) => {
     const { cpf, name } = request.body;
-    const id = uuidv4();
 
+    //codigo que verifica se cpf ja esta cadastrado no banco de dados
+    const customerAlreadyExists = customers.some((customer) => customer.cpf === cpf)
+
+    if (customerAlreadyExists) {
+        return response.status(400).json(
+            {erro: 'Usuário já existe!'}
+        )
+    }
     customers.push({
         cpf,
         name,
-        id,
+        id: uuidv4(),
         statement: []
     });
 
